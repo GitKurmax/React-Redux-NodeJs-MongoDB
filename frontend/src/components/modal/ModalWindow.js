@@ -1,21 +1,25 @@
 import React, { useState } from 'react';
 import { Button, Icon, Modal, Form } from 'semantic-ui-react';
+import { useSelector, useDispatch } from 'react-redux';
+import { changeEditInput } from '../../redux/actions';
 import './Modal.scss';
 
 const ModalWindow = (props) => {
-  const [editUser, setEditUser] = useState({name: props.name || '', age: props.age || ''});
+  const editUser = useSelector(state => {
+    return {
+      name: state.showModalReducer.user.name || '',
+      age: state.showModalReducer.user.age || ''
+    }
+  });
+  
+  const dispatch = useDispatch();
 
   const handleChange = (field, event) => {
     if (field === 'name') {
-        this.setState({
-            name: event.target.value
-        })
+      dispatch(changeEditInput(event.target.value, editUser.age));
     } else {
-        this.setState({
-            age: event.target.value
-        })
+      dispatch(changeEditInput(editUser.name, event.target.value));
     }
-    
   }
 
   const handleClose = (action) => {

@@ -1,7 +1,13 @@
-const initialState = {
-    data: []
-}
+import { combineReducers } from 'redux';
+import getDataReducer from './reducers/getDataReducer';
+import showModalReducer from './reducers/showModalReducer';
+import inputChangesReducer from './reducers/inputChangesReducer';
 
-export default function rootReducer(state = initialState, action) {
-    return state;
-}
+
+const rootReducer = combineReducers({
+    getDataReducer,
+    showModalReducer,
+    inputChangesReducer
+});
+
+export default rootReducer;

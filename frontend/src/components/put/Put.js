@@ -1,24 +1,25 @@
 import React, { useState } from 'react';
 import "./Put.scss";
-import { Button, Form } from 'semantic-ui-react'
+import { Button, Form } from 'semantic-ui-react';
+import { useSelector, useDispatch } from 'react-redux';
+import { changeAddInput } from '../../redux/actions';
 
 const Put = (props) => {
-
-    const [name, setName] = useState('');
-    const [age, setAge] = useState('');
+    let name = useSelector(state => state.inputChangesReducer.addUser.name);
+    let age = useSelector(state => state.inputChangesReducer.addUser.age);
+    const dispatch = useDispatch();
     
     const handleChange = (field, event) => {
         if (field === 'name') {
-            setName(event.target.value)
+            dispatch(changeAddInput(event.target.value, age));
         } else {
-            setAge(event.target.value)
+            dispatch(changeAddInput(name, event.target.value))
         }
     }
 
     const addUser = () => {
         props.showLoader(true);
-        setName('');
-        setAge('');
+        dispatch(changeAddInput('', ''));
 
         fetch("http://localhost:3100/api/add", {  
             method: 'POST',  
