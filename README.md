@@ -1,1 +1,1 @@
-# ReactWithHooks-NodeJs-MongoDB app
+# ReactWithHooks-ReduxWithHooks-NodeJs-MongoDB app
