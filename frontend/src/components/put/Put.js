@@ -21,7 +21,7 @@ const Put = (props) => {
         props.showLoader(true);
         dispatch(changeAddInput('', ''));
 
-        fetch("http://localhost:3100/api/add", {  
+        fetch("http://localhost:5000/api/add", {  
             method: 'POST',  
             headers: {  
                 "Content-type": 'application/json'  
@@ -29,7 +29,7 @@ const Put = (props) => {
             body: JSON.stringify({name: name, age: age})
             })
             .catch(err => {
-                alert('Sorry, you don`t nave a connection to database. Check your internet connection pease.');
+                alert('Sorry, you don`t have a connection to database. Check your internet connection pease.');
             })
             .then(() => {
                 props.updateData();                

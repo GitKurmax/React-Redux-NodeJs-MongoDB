@@ -2,6 +2,7 @@ export const SHOW_LOADER = 'SHOW_LOADER';
 export const DISPLAY = 'DISPLAY';
 export const SHOW_MODAL_EDIT = 'SHOW_MODAL_EDIT';
 export const SHOW_MODAL_DELETE = 'SHOW_MODAL_DELETE';
+export const SHOW_MODAL_AUTH = 'SHOW_MODAL_AUTH';
 export const CHANGE_ADD_INPUT = 'CHANGE_ADD_INPUT';
 export const CHANGE_EDIT_INPUT = 'CHANGE_EDIT_INPUT';
 
@@ -9,7 +10,7 @@ export function getAll() {
     return (dispatch) => {
         dispatch(showLoader(true));
 
-    fetch("http://localhost:3100/api/getAll")
+    fetch("http://localhost:5000/api/getAll")
         .catch(err => console.log('Error in componentDidMount: ' + err))
         .then(response => {
             if (!response) {
@@ -61,6 +62,13 @@ export function showModalDelete(trigger, id) {
         payload: trigger,
         id: id
     };
+}
+
+export function showModalAuth(trigger) {
+  return {
+      type: SHOW_MODAL_AUTH,
+      payload: trigger,
+  };
 }
 
 export function changeAddInput(name, age) {

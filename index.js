@@ -3,8 +3,12 @@ const app = express();
 const cors = require('cors');
 const mongoose = require('mongoose');
 const bodyParser = require("body-parser");
+const path = require('path');
+const port = process.env.PORT || 5000;
+const connectToDB = require("./backend/connect");
+const auth = require('./backend/controllers/auth');
 
-require('./person.model');
+require('./backend/models/person.model');
 
 const Person = mongoose.model('persons');
 
@@ -14,10 +18,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
-mongoose.connect('mongodb+srv://alex:XY31TQGX9CA4FRtt@cluster0-mzhck.mongodb.net/test?retryWrites=true&w=majority',
- {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true})
-    .then(() => console.log('mongodb has started'))
-    .catch((err) => console.log('connection error' + err));
+connectToDB();
 
 app.get('/api/getAll', function (req, res) {
     Person.find()
@@ -25,9 +26,7 @@ app.get('/api/getAll', function (req, res) {
         .catch(error => console.log(error));
 });
 
-
 app.post('/api/add', function (req, res) {
-    console.log(req.body)
     const person = new Person ({
         name: req.body.name,
         age: req.body.age
@@ -35,18 +34,18 @@ app.post('/api/add', function (req, res) {
 
     person.save()
      .then(user => {
-        console.log(user)
         res.json(user)})
      .catch(error => console.log(error));
 });
 
 app.post('/api/removeUser', function (req, res) {
     Person.findOneAndRemove({_id: req.body.id}, (err, todo) => {
-    console.log(todo);
     if (err) return res.status(500).send(err);
-    return res.status(200).send({'message':'User successfully deleted'});
+        return res.status(200).send({'message':'User successfully deleted'});
     });
 });
+
+app.use('/api/authRegister', auth.register);
 
 app.put('/api/editUser', function (req, res) {
     Person.findOneAndUpdate({_id: req.body.id},
@@ -57,9 +56,18 @@ app.put('/api/editUser', function (req, res) {
     });
 });
 
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static('frontend/dist/browser'));
 
-app.listen(3100, function () {
-  console.log('Server listening on port 3100!');
+    app.get('*', (req, res) => {
+        res.sendFile(
+            path.resolve(
+                __dirname, 'frontend', 'dist', 'browser', 'index.html'
+            )
+        )
+    })
+}
+
+app.listen(port, function () {
+  console.log(`Server listening on port ${port}!`);
 });
-
-

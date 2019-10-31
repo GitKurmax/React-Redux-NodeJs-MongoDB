@@ -3,29 +3,34 @@ import "./List.scss";
 import { Icon, Label, Table } from 'semantic-ui-react';
 import ModalWindow from '../modal/ModalWindow';
 import { useSelector, useDispatch } from 'react-redux';
-import { showModalDelete, showModalEdit } from '../../redux/actions';
+import { showModalDelete, showModalEdit, showModalAuth } from '../../redux/actions';
+import { withRouter } from 'react-router-dom';
 
 const List = (props) => {
     const displayModalDelete = useSelector(state => state.showModalReducer.showModalDelete);
     const displayModalEdit = useSelector(state => state.showModalReducer.showModalEdit);
+    const displayModalAuth = useSelector(state => state.showModalReducer.showModalAuth);
+    const isRegistered = useSelector(state => state.showModalReducer.registered);
     const dispatch = useDispatch();
     const id = useSelector(state => state.showModalReducer.id);
-    const name = useSelector(state => state.showModalReducer.user.name);
-    const age = useSelector(state => state.showModalReducer.user.age);
 
     const showModal = (action, id, editName, editAge) => {
-        if (action === 'delete') {
+        if (action === 'delete' && isRegistered) {
             dispatch(showModalDelete(true, id));
         }
 
-        if (action === 'edit') {
+        if (action === 'edit' && isRegistered) {
             dispatch(showModalEdit(true, id, {name: editName, age: editAge}));
+        }
+        if (!isRegistered) {
+            dispatch(showModalAuth(true));
         }
     }
 
     const closeModal = () => {
         dispatch(showModalDelete(false, id));
         dispatch(showModalEdit(false, id, {}));
+        dispatch(showModalAuth(false));
     }
 
     const deleteUser = () => {
@@ -58,6 +63,10 @@ const List = (props) => {
           })
       }
 
+      const register = () => {
+        props.history.push('/register');
+      }
+
       const list = props.data.map(user => 
         <Table.Row key={user.id + user.position}>
             <Table.Cell className="cell-position">{user.position}</Table.Cell>
@@ -85,9 +94,16 @@ const List = (props) => {
                 closeModal={closeModal}
                 editUser={editUser}
                 showEdit={showModal}
-                // name={name}
-                // age={age}
             />}
+            {displayModalAuth && 
+                <ModalWindow 
+                open={displayModalAuth}
+                closeModal={closeModal}
+                showAuth={showModal}
+                register={register}
+                // login={login}
+            />}
+
 
             <div className="list-container">
                 <Table celled>
@@ -110,4 +126,4 @@ const List = (props) => {
     )
 }
 
-export default List;
+export default withRouter(List);

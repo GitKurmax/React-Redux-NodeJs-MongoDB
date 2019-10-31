@@ -1,6 +1,8 @@
 const initialState = {
     showModalEdit: false,
     showModalDelete: false,
+    showModalAuth: false,
+    registered: false,
     id: null,
     user: {
         name: '',
@@ -22,6 +24,11 @@ export default function showModalReducer(state = initialState, action) {
             ...state,
             showModalDelete: action.payload,
             id: action.id
+        };
+        case 'SHOW_MODAL_AUTH' : 
+        return {
+            ...state,
+            showModalAuth: action.payload,
         };
         case 'CHANGE_EDIT_INPUT' : 
             return {

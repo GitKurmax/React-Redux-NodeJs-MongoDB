@@ -10,7 +10,6 @@ const Content = (props) => {
     const reduxData = useSelector(state => state.getDataReducer.data);
     const loaderTrigger = useSelector(state => state.getDataReducer.showLoader);
     const dispatch = useDispatch();
-
     useEffect(() => {
         if(!reduxData.length) {
           dispatch(getAll())

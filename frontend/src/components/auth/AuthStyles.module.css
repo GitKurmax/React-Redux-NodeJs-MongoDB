@@ -1,0 +1,14 @@
+.wrapper {
+    padding-top: 150px;
+    display: flex;
+    justify-content: center;
+}
+
+.form {
+    width: 100%;
+    max-width: 400px !important;
+    padding: 30px;
+    border-radius: 30px;
+    background-color: #fafafa;
+    box-shadow: 2px 2px 3px 2px lightgrey;
+}

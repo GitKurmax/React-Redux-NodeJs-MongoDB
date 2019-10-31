@@ -30,10 +30,40 @@ const ModalWindow = (props) => {
     if (action === 'edit') {
       props.editUser(editUser.name, editUser.age);
     }
+    if (action === 'register') {
+      props.register();
+    }
+    if (action === 'login') {
+      props.login();
+    }
+
   }
 
     return (
       <React.Fragment>
+        {props.showAuth && 
+          <Modal
+          open={props.open}
+          onClose={handleClose}
+          basic
+          size='small'
+          >
+          <Modal.Content>
+            <h3>Unregistered users can't edit or delete user data</h3>
+          </Modal.Content>
+          <Modal.Actions>
+            <Button onClick={() => handleClose('login')} inverted>
+              <Icon name='checkmark' /> login
+            </Button>
+            <Button onClick={() => handleClose('register')} inverted>
+              <Icon name='checkmark' /> register
+            </Button>
+            <Button onClick={() => handleClose('close')} inverted>
+              <Icon name='checkmark' /> close
+            </Button>
+          </Modal.Actions>
+          </Modal>
+        }
         {props.showDelete && 
           <Modal
           open={props.open}
