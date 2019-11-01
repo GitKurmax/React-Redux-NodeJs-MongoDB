@@ -1,6 +1,9 @@
 import React, {useState} from 'react';
 import { Button, Checkbox, Form } from 'semantic-ui-react';
 import styles from './AuthStyles.module.css';
+import { useSelector, useDispatch } from 'react-redux';
+import { checkAndSaveToDB } from '../../redux/actions';
+import Loader from '../loader/Loader';
 
 const Registration = () => {
     const [firstName, setFirstName] = useState('');
@@ -8,25 +11,35 @@ const Registration = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const dispatch = useDispatch();
+    const loaderTrigger = useSelector(state => state.getDataReducer.showLoader);
 
 const addUser = () => {
-    console.log({
+    const formData = {
         firstName,
         lastName,
         email,
         password
-    })
+    }
+
+    if (password === confirmPassword) {
+        dispatch(checkAndSaveToDB(formData));
+    }
+    if (password !== confirmPassword) {
+        alert('password and confirmPassword don`t match');
+    }
 }
 
 const changeValue =  (event, field) => {
-    if (field == 'firstName') setFirstName(event.target.value);
-    if (field =='lastName') setLastName(event.target.value);
-    if (field == 'email') setEmail(event.target.value);
-    if (field =='password') setPassword(event.target.value);
-    if (field =='confirmPassword') setConfirmPassword(event.target.value);
+    if (field === 'firstName') setFirstName(event.target.value);
+    if (field ==='lastName') setLastName(event.target.value);
+    if (field === 'email') setEmail(event.target.value);
+    if (field ==='password') setPassword(event.target.value);
+    if (field ==='confirmPassword') setConfirmPassword(event.target.value);
 }
 
     return <div className={styles.wrapper}>
+        {loaderTrigger && <Loader/>}
         <Form className={styles.form}>
             <Form.Field>
             <label>First Name</label>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import List from '../list/List';
 import Put from '../put/Put';
-import Loader from '../loader/Loader'
+import Loader from '../loader/Loader';
 import './Content.scss';
 import { useSelector, useDispatch } from 'react-redux';
 import { getAll, showLoader } from '../../redux/actions';
