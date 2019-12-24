@@ -17,10 +17,21 @@ module.exports.register = (req, res) => {
 
     user.save()
     .then(() => {
-        res.status(201).json({message: 'success'});
+        res.status(201).json({message: 'success', status: 201});
     })
     .catch(err => {
-        console.log
-        res.status(409).json({message: 'This email alredy exists'});
+        res.status(409).json({message: 'This email alredy exists', status: 409});
     });
+}
+
+module.exports.login = (req, res) => {
+    User.findOne({email: req.body.email})
+    .then(user => {
+        if (user) {
+            console.log(user)
+        } else {
+            console.log(user)
+        }
+    });
+
 }

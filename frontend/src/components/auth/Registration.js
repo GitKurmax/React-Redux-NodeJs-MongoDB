@@ -1,7 +1,8 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { Button, Checkbox, Form } from 'semantic-ui-react';
 import styles from './AuthStyles.module.css';
 import { useSelector, useDispatch } from 'react-redux';
+import { useHistory} from 'react-router-dom'
 import { checkAndSaveToDB } from '../../redux/actions';
 import Loader from '../loader/Loader';
 
@@ -13,8 +14,16 @@ const Registration = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const dispatch = useDispatch();
     const loaderTrigger = useSelector(state => state.getDataReducer.showLoader);
+    const registered = useSelector(state => state.changeLocationReducer.registered);
+    const history = useHistory();
 
-const addUser = () => {
+    useEffect(() => {
+        if (registered) {
+            history.push('/login');
+        }
+    }, [registered])
+
+const addUser = async () => {
     const formData = {
         firstName,
         lastName,
@@ -22,11 +31,12 @@ const addUser = () => {
         password
     }
 
-    if (password === confirmPassword) {
-        dispatch(checkAndSaveToDB(formData));
-    }
     if (password !== confirmPassword) {
         alert('password and confirmPassword don`t match');
+    }
+
+    if (password === confirmPassword) {
+        await dispatch(checkAndSaveToDB(formData));
     }
 }
 
@@ -69,4 +79,4 @@ const changeValue =  (event, field) => {
     </div>
 }
 
-export default Registration
+export default Registration;

@@ -6,6 +6,8 @@ export const SHOW_MODAL_AUTH = 'SHOW_MODAL_AUTH';
 export const CHANGE_ADD_INPUT = 'CHANGE_ADD_INPUT';
 export const CHANGE_EDIT_INPUT = 'CHANGE_EDIT_INPUT';
 export const REGISTER_USER = 'REGISTER_USER';
+export const SET_REGISTERED_STATUS = 'SET_REGISTERED_STATUS';
+export const LOGIN = 'LOGIN';
 
 export function getAll() {
     return (dispatch) => {
@@ -50,9 +52,13 @@ export function checkAndSaveToDB(formData) {
        })
        .then(res => {
          console.log(res);
-         if (res.status === 'failed') {
-           alert('A user with this email exists');
+         if (res.status === 409) {
+           alert(res.message);
          }
+
+         if (res.status === 201) {
+          dispatch(setRegisteredStatus(true));
+        }
        })
        .catch(err => console.log('Error in send formData: ' + err))
     }
@@ -118,4 +124,41 @@ export function registerUser(formData) {
       registrationData: formData
   };
 }
+
+export function setRegisteredStatus(trigger) {
+  return {
+    type: SET_REGISTERED_STATUS,
+    registered: trigger
+
+  }  
+}
+
+export function login(formData) {
+  return (dispatch) => {
+    // dispatch(showLoader(true));
+    fetch("http://localhost:5000/api/authLogin", {  
+        method: 'POST',  
+        headers: {  
+            "Content-type": 'application/json'  
+        },  
+        body: JSON.stringify(formData)
+       })
+       .then(response => {
+        //  dispatch(showLoader(false));
+         return response.json();
+       })
+       .then(res => {
+         console.log(res);
+         if (res.status === 409) {
+           alert(res.message);
+         }
+
+         if (res.status === 201) {
+          // dispatch(setRegisteredStatus(true));
+        }
+       })
+       .catch(err => console.log('Error in send formData: ' + err))
+    }
+}
+
 

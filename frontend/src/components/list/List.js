@@ -3,13 +3,14 @@ import "./List.scss";
 import { Icon, Label, Table } from 'semantic-ui-react';
 import ModalWindow from '../modal/ModalWindow';
 import { useSelector, useDispatch } from 'react-redux';
-import { showModalDelete, showModalEdit, showModalAuth } from '../../redux/actions';
+import { showModalDelete, showModalEdit, showModalAuth, showModalLogin} from '../../redux/actions';
 import { withRouter } from 'react-router-dom';
 
 const List = (props) => {
     const displayModalDelete = useSelector(state => state.showModalReducer.showModalDelete);
     const displayModalEdit = useSelector(state => state.showModalReducer.showModalEdit);
     const displayModalAuth = useSelector(state => state.showModalReducer.showModalAuth);
+    const displayModalLogin = useSelector(state => state.showModalReducer.showModalLogin);
     const isRegistered = useSelector(state => state.showModalReducer.registered);
     const dispatch = useDispatch();
     const id = useSelector(state => state.showModalReducer.id);
@@ -67,6 +68,10 @@ const List = (props) => {
         props.history.push('/register');
       }
 
+      const login = () => {
+        props.history.push('/login');
+      }
+
       const list = props.data.map(user => 
         <Table.Row key={user.id + user.position}>
             <Table.Cell className="cell-position">{user.position}</Table.Cell>
@@ -101,10 +106,9 @@ const List = (props) => {
                 closeModal={closeModal}
                 showAuth={showModal}
                 register={register}
-                // login={login}
+                login={login}
             />}
-
-
+            
             <div className="list-container">
                 <Table celled>
                 <Table.Header>
